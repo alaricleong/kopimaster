@@ -1,12 +1,3 @@
-Here is the complete, corrected code for your file.
-
-### What was fixed:
-
-1. **Timer & Countdown Bar:** Fixed the countdown loop logic so that both the visual colored bar shrinks and the text countdown (`--s remaining`) updates accurately every tick.
-2. **Removed Green Banner:** Eliminated the disruptive inline green block/banner that was rendering between the header and the mix box.
-3. **Kept Floating Feedback:** Maintained the sleek, non-disruptive floating feedback pop-up (`#feedbackMsg`) at the bottom of the screen so you still get instant updates when you serve, clear, or make a mistake.
-
-```html
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -111,9 +102,9 @@ function sfxStart()  { _beep(392,'triangle',0.09,0.15);_beep(523,'triangle',0.11
     </div>
   </header>
 
-  <div id="timerBarWrap" class="hidden flex-shrink-0 h-5 bg-amber-100 dark:bg-slate-700 w-full relative">
+  <div id="timerBarWrap" class="hidden flex-shrink-0 h-4 bg-amber-100 dark:bg-slate-700 w-full relative">
     <div id="timerBar" class="h-full bg-amber-500 timer-bar-transition" style="width:100%"></div>
-    <div id="timerText" class="absolute inset-0 flex items-center justify-center text-[11px] font-black text-amber-950 dark:text-amber-100 uppercase tracking-widest drop-shadow-sm">--</div>
+    <div id="timerText" class="absolute inset-0 flex items-center justify-center text-[10px] font-black text-amber-950 dark:text-amber-100 uppercase tracking-widest drop-shadow-sm">--</div>
   </div>
 
   <section id="screenStart" class="screen active flex-col flex-1 items-center justify-between overflow-y-auto bg-gradient-to-b from-amber-400 via-amber-300 to-orange-200 dark:from-amber-800 dark:via-amber-900 dark:to-slate-900 px-5 py-6">
@@ -164,7 +155,7 @@ function sfxStart()  { _beep(392,'triangle',0.09,0.15);_beep(523,'triangle',0.11
       </div>
 
       <div>
-        <p class="text-center text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-amber-300 mb-1.5">Session Timer Length</p>
+        <p class="text-center text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-amber-300 mb-1.5">Custom Session Clock</p>
         <div class="grid grid-cols-3 gap-2">
           <button id="clockDefault" data-clock="default" class="clock-btn rounded-xl py-2 font-black text-xs bg-amber-600 text-white ring-2 ring-white shadow">Progression</button>
           <button id="clock30" data-clock="30" class="clock-btn rounded-xl py-2 font-black text-xs bg-stone-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 shadow">30s Timer</button>
@@ -328,13 +319,13 @@ const LEVEL_CONFIG = [
 const DIFF_CONFIG = {
   easy:   { timeMulti:1.5, scoreMulti:0.7, livesStart:5, hintVisible:true },
   medium: { timeMulti:1.0, scoreMulti:1.0, livesStart:3, hintVisible:true },
-  hard: { timeMulti:0.7, scoreMulti:1.4, livesStart:2, hintVisible:false }
+  hard:   { timeMulti:0.7, scoreMulti:1.4, livesStart:2, hintVisible:false }
 };
 
 const STATE = {
   screen: 'start',
   difficulty: 'medium',
-  customTimeOverride: null, 
+  customTimeOverride: null, // Track 30s vs 90s custom dashboards
   score: 0,
   bestScore: 0,
   level: 1,
@@ -368,7 +359,6 @@ function showScreen(name){
   STATE.screen = name;
 }
 
-// FIXED TIMER ENGINE COUNTDOWN LOGIC
 function startTimer(durationMs) {
   stopTimer();
   STATE.timerLimit = durationMs;
@@ -527,6 +517,7 @@ function newOrder(){
   $('orderBadge').textContent = `#${STATE.totalOrders + 1}`;
   $('orderHint').textContent = getDiffCfg().hintVisible ? selected.hint : 'No hints available on Hard mode!';
   
+  // Set execution clock length based on normal level logic or override selector
   let baseMs = STATE.customTimeOverride ? STATE.customTimeOverride : getLevelCfg().timeMs;
   startTimer(Math.round(baseMs * getDiffCfg().timeMulti));
 }
@@ -614,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Wire custom dashboard 30s / 90s configuration buttons
   const clockButtons = document.querySelectorAll('.clock-btn');
   clockButtons.forEach(btn => {
     btn.addEventListener('click', () => {
