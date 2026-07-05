@@ -1,641 +1,1039 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full select-none overflow-hidden">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Kopitiam Hero</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script>
-tailwind.config = {
-  darkMode: 'class',
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Nunito','system-ui','sans-serif'],
-        kaiti: ['"ZCOOL XiaoWei"','"Noto Serif SC"','KaiTi','"STKaiti"','serif']
-      },
-      keyframes: {
-        floatUp:      { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-7px)' } },
-        popIn:        { '0%':{ transform:'scale(0.6)',opacity:'0' }, '70%':{ transform:'scale(1.12)' }, '100%':{ transform:'scale(1)',opacity:'1' } },
-        slideUp:      { '0%':{ transform:'translateY(20px)',opacity:'0' },'100%':{ transform:'translateY(0)',opacity:'1' } },
-        wiggle:       { '0%,100%':{ transform:'rotate(-5deg)' }, '50%':{ transform:'rotate(5deg)' } },
-        urgentPop:    { '0%,100%':{ transform:'scale(1)' }, '50%':{ transform:'scale(1.2)' } },
-        shimmer:      { '0%':{ backgroundPosition:'-200% 0' }, '100%':{ backgroundPosition:'200% 0' } },
-        correctFlash: { '0%,100%':{ backgroundColor:'transparent' }, '50%':{ backgroundColor:'rgba(16,185,129,0.25)' } },
-        wrongFlash:   { '0%,100%':{ backgroundColor:'transparent' }, '50%':{ backgroundColor:'rgba(239,68,68,0.25)' } }
-      },
-      animation: {
-        floatUp:      'floatUp 2.8s ease-in-out infinite',
-        popIn:        'popIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards',
-        slideUp:      'slideUp 0.4s ease-out forwards',
-        wiggle:       'wiggle 0.25s ease-in-out infinite',
-        urgentPop:    'urgentPop 0.35s ease-in-out infinite',
-        shimmer:      'shimmer 2.2s linear infinite',
-        correctFlash: 'correctFlash 0.6s ease-in-out 2',
-        wrongFlash:   'wrongFlash 0.5s ease-in-out 3'
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kopitiam Master - Singapore Drink Champion</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
+            kaiti: ['"ZCOOL XiaoWei"', '"Noto Serif SC"', 'KaiTi', '"STKaiti"', 'serif']
+          },
+          animation: {
+            'bounce-slow': 'bounce 2s infinite',
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'wiggle': 'wiggle 0.3s ease-in-out infinite',
+          },
+          keyframes: {
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-3deg)' },
+              '50%': { transform: 'rotate(3deg)' },
+            }
+          }
+        }
       }
     }
-  }
-}
-</script>
-<style>
-html,body{ margin:0;padding:0;height:100%;width:100%;overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent; }
-.font-kaiti{ font-family:"ZCOOL XiaoWei","Noto Serif SC","KaiTi","STKaiti",serif; }
-.liquid-anim{ transition:height 0.5s cubic-bezier(0.175,0.885,0.32,1.275), y 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
-.ing-btn:active{ transform:scale(0.84) !important; }
-::-webkit-scrollbar{ width:3px; }
-::-webkit-scrollbar-thumb{ background:#d97706;border-radius:10px; }
-.shimmer-overlay{ background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.35) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 2.2s linear infinite; }
-.timer-bar-transition{ transition:width 0.1s linear; }
-.screen{ display:none; }
-.screen.active{ display:flex; }
-</style>
+  </script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden !important;
+    }
+    .font-kaiti-style {
+      font-family: "ZCOOL XiaoWei", "Noto Serif SC", "KaiTi", "STKaiti", serif;
+      font-weight: bold;
+    }
+    .urgent-countdown {
+      animation: wiggle 0.25s infinite, pulse-fast 0.5s infinite;
+      color: #ef4444 !important;
+    }
+    .liquid-level {
+      transition: height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.5s ease;
+    }
+  </style>
 </head>
-<body class="bg-amber-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col h-full font-sans antialiased select-none">
+<body class="bg-amber-50 text-slate-800 dark:bg-slate-900 dark:text-amber-50 transition-colors duration-300 flex flex-col h-full font-sans antialiased overflow-hidden">
+  <script>
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioCtx();
+      }
+    }
+    function playBeep(freq, type, duration, vol) {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = type || 'sine';
+        osc.frequency.value = freq || 440;
+        gain.gain.setValueAtTime(vol || 0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.log("Audio play error", e);
+      }
+    }
+    function playSuccessSound() {
+      playBeep(523.25, 'triangle', 0.15, 0.15);
+      setTimeout(() => playBeep(659.25, 'triangle', 0.2, 0.15), 100);
+      setTimeout(() => playBeep(783.99, 'triangle', 0.3, 0.2), 200);
+    }
+    function playFailSound() {
+      playBeep(180, 'sawtooth', 0.4, 0.3);
+      setTimeout(() => playBeep(120, 'sawtooth', 0.5, 0.4), 150);
+    }
+    function playTapSound() {
+      playBeep(800, 'sine', 0.05, 0.1);
+    }
+    function playRemoveSound() {
+      playBeep(400, 'sine', 0.08, 0.1);
+    }
+    function playUrgentSound() {
+      playBeep(987.77, 'sine', 0.1, 0.25);
+    }
+  </script>
 
-<script>
-let _ac = null;
-function _initAC(){ if(!_ac){ try{ _ac=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} } }
-function _beep(freq,type,dur,vol,delay=0){
-  try{
-    _initAC(); if(!_ac)return;
-    const o=_ac.createOscillator(), g=_ac.createGain();
-    o.connect(g); g.connect(_ac.destination);
-    o.type=type||'sine'; o.frequency.value=freq||440;
-    const t=_ac.currentTime+delay;
-    g.gain.setValueAtTime(vol||0.1,t);
-    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
-    o.start(t); o.stop(t+dur);
-  }catch(e){}
-}
-function sfxSuccess(){ _beep(523,'triangle',0.1,0.18);_beep(659,'triangle',0.12,0.18,0.1);_beep(784,'triangle',0.15,0.22,0.21);_beep(1047,'triangle',0.2,0.2,0.33); }
-function sfxFail()   { _beep(220,'sawtooth',0.28,0.3);_beep(147,'sawtooth',0.35,0.35,0.2); }
-function sfxTap()    { _beep(880,'sine',0.04,0.09); }
-function sfxRemove() { _beep(380,'sine',0.05,0.08); }
-function sfxUrgent() { _beep(1320,'sine',0.07,0.28); }
-function sfxStart()  { _beep(392,'triangle',0.09,0.15);_beep(523,'triangle',0.11,0.18,0.13);_beep(659,'triangle',0.14,0.2,0.27); }
-</script>
+  <div id="app" class="flex flex-col h-full w-full max-w-4xl mx-auto bg-white dark:bg-slate-800 shadow-2xl relative overflow-hidden">
+    <header class="bg-gradient-to-r from-amber-600 to-amber-800 dark:from-slate-950 dark:to-slate-800 text-white p-2 px-3 flex items-center justify-between shadow-md select-none shrink-0 h-[52px]">
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="text-xl shrink-0">☕</span>
+        <div class="leading-tight shrink-0">
+          <h1 class="text-sm font-extrabold tracking-wide uppercase">Kopitiam Master</h1>
+          <p class="text-[9px] opacity-80 font-semibold tracking-wider">DRINK CHAMPION</p>
+        </div>
+        
+        <div id="headerTimerBox" class="hidden items-center gap-1.5 bg-black/30 px-2 py-0.5 rounded-full border border-white/10 shrink-0">
+          <i class="fa-solid fa-stopwatch text-yellow-400 text-xs"></i>
+          <span id="timerSecs" class="font-black text-xs text-yellow-300 w-7 inline-block text-center">60s</span>
+          <div class="w-12 bg-slate-600 h-1.5 rounded-full overflow-hidden hidden sm:block">
+            <div id="timerBar" class="bg-emerald-400 h-full transition-all duration-100" style="width: 100%;"></div>
+          </div>
+        </div>
 
-<div id="app" class="flex flex-col h-screen max-h-screen w-full max-w-md mx-auto bg-white dark:bg-slate-800 shadow-2xl relative overflow-hidden">
-  
-  <header id="gameHeader" class="hidden flex-shrink-0 bg-amber-600 dark:bg-amber-700 text-white px-3 py-2 flex items-center justify-between shadow-md z-10">
-    <div class="flex items-center gap-2">
-      <button id="btnPause" class="w-8 h-8 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center text-sm shadow">
-        <i class="fas fa-pause"></i>
-      </button>
-      <div class="flex flex-col leading-tight">
-        <span class="text-xs font-bold uppercase tracking-wide opacity-80">Score</span>
-        <span id="scoreDisplay" class="text-lg font-black">0</span>
+        <div id="headerGameStats" class="hidden items-center gap-2 ml-1 bg-white/10 px-2 py-0.5 rounded-lg border border-white/5 shrink-0 text-xs">
+          <div class="flex items-center gap-1">
+            <span class="text-[9px] uppercase tracking-wider text-amber-200 font-bold">Order:</span>
+            <span id="gameProgress" class="font-black text-white">1/5</span>
+          </div>
+          <div class="w-px h-3 bg-white/20"></div>
+          <div class="flex items-center gap-1">
+            <span class="text-[9px] uppercase tracking-wider text-emerald-300 font-bold">Score:</span>
+            <span id="gameScore" class="font-black text-emerald-300">0</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center">
-      <span class="text-xs font-bold uppercase tracking-wide opacity-80">Level</span>
-      <span id="levelDisplay" class="text-lg font-black">1</span>
-    </div>
-    <div class="flex flex-col items-end leading-tight">
-      <span class="text-xs font-bold uppercase tracking-wide opacity-80">Lives</span>
-      <div id="livesDisplay" class="flex gap-0.5 text-base"></div>
-    </div>
-  </header>
 
-  <div id="timerBarWrap" class="hidden flex-shrink-0 h-4 bg-amber-100 dark:bg-slate-700 w-full relative">
-    <div id="timerBar" class="h-full bg-amber-500 timer-bar-transition" style="width:100%"></div>
-    <div id="timerText" class="absolute inset-0 flex items-center justify-center text-[10px] font-black text-amber-950 dark:text-amber-100 uppercase tracking-widest drop-shadow-sm">--</div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="langToggle" onclick="toggleLanguage()" class="bg-amber-700/60 hover:bg-amber-700 dark:bg-slate-700 dark:hover:bg-slate-600 px-2 py-0.5 rounded-full text-[11px] font-bold transition-all flex items-center gap-1 shadow-inner border border-amber-500/20">
+          <i class="fa-solid fa-language text-yellow-300"></i>
+          <span id="langLabel">简体中文</span>
+        </button>
+        <button onclick="toggleDarkMode()" class="w-7 h-7 rounded-full bg-amber-700/60 hover:bg-amber-700 dark:bg-slate-700 dark:hover:bg-slate-600 flex items-center justify-center transition-all shadow-inner border border-amber-500/20" title="Toggle Theme">
+          <i id="themeIcon" class="fa-solid fa-moon text-yellow-300 text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-hidden flex flex-col p-2 gap-2 justify-between">
+      <div id="startScreen" class="flex-1 flex flex-col justify-between py-2 text-center overflow-hidden">
+        <div class="space-y-4 my-auto">
+          <div class="relative inline-block">
+            <svg class="w-24 h-24 mx-auto filter drop-shadow-lg animate-bounce-slow" viewBox="0 0 100 100">
+              <path d="M25 20 C25 15, 75 15, 75 20 L70 80 C70 85, 30 85, 30 80 Z" fill="#FBFBFD" stroke="#D17A22" stroke-width="4"/>
+              <path d="M30 35 C35 32, 65 32, 70 35" fill="none" stroke="#D17A22" stroke-width="3"/>
+              <path d="M42 55 Q50 42 58 55 Q50 68 42 55" fill="#1b5e20"/>
+              <path d="M50 45 L50 65" stroke="#1b5e20" stroke-width="2"/>
+              <circle cx="50" cy="55" r="4" fill="#facc15" />
+              <path d="M25 35 C10 35, 10 65, 25 65" fill="none" stroke="#D17A22" stroke-width="4"/>
+              <path d="M40 10 Q45 5 40 0" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+              <path d="M50 12 Q55 7 50 2" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+              <path d="M60 10 Q65 5 60 0" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-extrabold tracking-tight text-amber-800 dark:text-amber-400">
+              <span class="block text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Welcome to</span>
+              Kopitiam Master!
+            </h2>
+            <p id="tagline" class="text-xs text-slate-600 dark:text-slate-300 mt-1 px-4 max-w-md mx-auto">
+              Learn to brew Singaporean coffee shop drinks like a professional "Kopi Master"! Perfect for grandchildren, grandparents, and coffee lovers alike!
+            </p>
+          </div>
+          <div class="bg-amber-100/60 dark:bg-slate-700/50 p-3 rounded-xl max-w-xs mx-auto border border-amber-200 dark:border-slate-600">
+            <h3 id="timerSelectTitle" class="text-[11px] font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider mb-2">
+              ⏱️ Select Round Speed (Timer)
+            </h3>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button onclick="setTimerOption(30)" id="timerOpt-30" class="timer-btn py-2 px-1 rounded-lg border-2 border-amber-500 font-extrabold text-sm text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 active:scale-95 transition-all">
+                30s <span class="block text-[9px] font-normal" id="speedFast">Fast!</span>
+              </button>
+              <button onclick="setTimerOption(60)" id="timerOpt-60" class="timer-btn py-2 px-1 rounded-lg border-2 border-amber-500 font-extrabold text-sm text-amber-700 dark:text-amber-300 bg-amber-500 text-white active:scale-95 transition-all">
+                60s <span class="block text-[9px] font-normal" id="speedMedium">Normal</span>
+              </button>
+              <button onclick="setTimerOption(90)" id="timerOpt-90" class="timer-btn py-2 px-1 rounded-lg border-2 border-amber-500 font-extrabold text-sm text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 active:scale-95 transition-all">
+                90s <span class="block text-[9px] font-normal" id="speedChill">Chill</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="px-4 mt-2">
+          <button onclick="startGame()" class="w-full max-w-md mx-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-lg py-3 rounded-xl shadow-md active:scale-98 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-play"></i>
+            <span id="btnStartGame">START BREWING / 开始冲泡</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="gameScreen" class="hidden flex-1 flex flex-col gap-2 overflow-hidden justify-between">
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 flex-1 items-stretch min-h-0 overflow-hidden">
+          <div class="md:col-span-5 bg-gradient-to-b from-amber-50 to-white dark:from-slate-800 dark:to-slate-700/90 rounded-xl border-2 border-amber-600/20 p-2 shadow-sm text-center flex flex-col justify-between items-center relative overflow-hidden min-h-0">
+            <div class="w-full">
+              <span class="inline-block bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider mb-0.5 border border-amber-500/20" id="drinkCategory">
+                Brew Request!
+              </span>
+              <h2 id="drinkNameEN" class="text-xl font-black text-amber-900 dark:text-amber-200 tracking-tight leading-tight">
+                Teh C Peng Kosong
+              </h2>
+              <h3 id="drinkNameZH" class="text-md font-kaiti-style text-amber-700 dark:text-amber-400">
+                淡奶冰茶无糖
+              </h3>
+              <p id="drinkExplain" class="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5 px-1 italic line-clamp-1">
+                Teh with evaporated milk, iced, and completely unsweetened.
+              </p>
+            </div>
+
+            <div class="my-1 relative w-28 h-32 flex items-end justify-center select-none shrink-0">
+              <div id="steamContainer" class="absolute top-0 flex gap-1.5 justify-center opacity-60">
+                <div class="w-0.5 h-5 bg-amber-300/60 rounded-full animate-pulse"></div>
+                <div class="w-0.5 h-6 bg-amber-400/60 rounded-full animate-bounce"></div>
+                <div class="w-0.5 h-5 bg-amber-300/60 rounded-full animate-pulse"></div>
+              </div>
+              <svg class="absolute inset-0 w-full h-full drop-shadow-sm" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M15 35 C-5 35, -5 75, 15 75" fill="none" stroke="#D17A22" stroke-width="5" stroke-linecap="round"/>
+                <defs>
+                  <clipPath id="cupClip">
+                    <path d="M20 22 C20 22, 80 22, 80 22 L75 88 C75 92, 25 92, 25 88 Z" />
+                  </clipPath>
+                </defs>
+                <g clip-path="url(#cupClip)">
+                  <rect id="liquidWater" x="0" y="100" width="100" height="0" class="liquid-level" fill="#93c5fd" opacity="0.8" />
+                  <rect id="liquidPowder" x="0" y="100" width="100" height="0" class="liquid-level" fill="#a16207" opacity="0.9" />
+                  <rect id="liquidMilk" x="0" y="100" width="100" height="0" class="liquid-level" fill="#fef08a" opacity="0.85" />
+                  <rect id="liquidSugar" x="0" y="100" width="100" height="0" class="liquid-level" fill="#ffffff" opacity="0.95" />
+                  <rect id="liquidLime" x="0" y="100" width="100" height="0" class="liquid-level" fill="#bef264" opacity="0.9" />
+                  <rect id="liquidRose" x="0" y="100" width="100" height="0" class="liquid-level" fill="#fda4af" opacity="0.95" />
+                  
+                  <g id="iceFloating" class="hidden transition-opacity duration-300">
+                    <rect x="25" y="30" width="12" height="12" rx="2" fill="#e2e8f0" opacity="0.85" stroke="#cbd5e1" stroke-width="1"/>
+                    <rect x="45" y="38" width="12" height="12" rx="2" fill="#e2e8f0" opacity="0.85" stroke="#cbd5e1" stroke-width="1"/>
+                    <rect x="62" y="32" width="12" height="12" rx="2" fill="#e2e8f0" opacity="0.85" stroke="#cbd5e1" stroke-width="1"/>
+                  </g>
+                  <g id="butterFloating" class="hidden transition-opacity duration-300">
+                    <rect x="40" y="55" width="20" height="10" rx="1" fill="#facc15" stroke="#eab308" stroke-width="1"/>
+                  </g>
+                </g>
+                <path d="M20 20 L75 88 C75 92, 25 92, 25 88 L20 20 L80 20" fill="none" stroke="#b45309" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span id="emptyCupText" class="absolute bottom-4 text-[9px] font-black text-amber-700/60 tracking-wider animate-pulse">EMPTY CUP / 空杯</span>
+            </div>
+
+            <button onclick="clearCup()" class="px-3 py-1 bg-rose-100 hover:bg-rose-200 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 rounded-full text-[10px] font-bold transition-all flex items-center gap-1 shadow-sm mt-0.5">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              <span id="btnClearCup">Reset Cup / 清除配料</span>
+            </button>
+          </div>
+
+          <div class="md:col-span-7 flex flex-col gap-1.5 justify-between min-h-0 overflow-hidden">
+            
+            <div class="bg-gradient-to-r from-amber-50 to-orange-100 dark:from-slate-800 dark:to-amber-950/20 rounded-xl border border-amber-400 shadow-sm p-2 text-[11px]">
+              <div class="flex items-center justify-between border-b border-amber-500/10 pb-1 mb-1">
+                <h3 class="font-extrabold text-amber-900 dark:text-amber-300 flex items-center gap-1 uppercase tracking-wide">
+                  <i class="fa-solid fa-list-check text-amber-600"></i>
+                  <span id="recipeTitle">Target Recipe / 冲配指标</span>
+                </h3>
+                <span id="guideText" class="text-[8px] text-amber-700 dark:text-amber-400 font-bold bg-white/80 dark:bg-slate-900/50 px-1.5 py-0.5 rounded-full">LIVE COUNT</span>
+              </div>
+              <div id="dynamicRecipeChecklist" class="grid grid-cols-2 gap-x-2 gap-y-1 font-bold text-slate-700 dark:text-slate-200">
+                </div>
+            </div>
+
+            <div class="flex-1 text-left bg-stone-50 dark:bg-slate-900 p-2 rounded-xl border border-amber-600/10 flex flex-col justify-start gap-1 shadow-inner min-h-0 overflow-y-auto">
+              <span id="currentListTitle" class="text-[8px] font-black uppercase text-slate-400 dark:text-slate-400 tracking-wider flex items-center gap-1 shrink-0">
+                <i class="fa-solid fa-layer-group"></i> My Current Mix / 我的配料
+              </span>
+              <div id="recipeStackList" class="flex flex-wrap gap-1 text-[10px] font-bold text-slate-700 dark:text-slate-200 py-0.5">
+                <div class="text-slate-400 italic text-[11px] py-1 w-full text-center" id="noIngredientsPrompt">No ingredients added yet. Tap items below to add!</div>
+              </div>
+            </div>
+
+            <div id="liveUncleBox" class="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-2 rounded-xl shadow-sm border-l-4 border-amber-500 flex items-center gap-2 shrink-0">
+              <div class="w-7 h-7 shrink-0 bg-amber-500/20 rounded-full flex items-center justify-center text-md shadow-inner">👴</div>
+              <div class="flex-1 overflow-hidden">
+                <h4 id="toastHeader" class="text-[8px] font-black uppercase tracking-widest text-amber-400 flex items-center gap-1">
+                  <i class="fa-solid fa-comment-dots"></i> Kopitiam Uncle Says:
+                </h4>
+                <p id="liveUncleMessage" class="text-[11px] font-semibold font-kaiti-style text-slate-100 truncate">
+                  "Steady! Fast hand fast foot, pick the right items below to fill up the order!"
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="shrink-0">
+          <h3 id="panelGridTitle" class="text-[10px] font-extrabold text-slate-400 dark:text-slate-300 uppercase tracking-wider text-center mb-1 flex items-center justify-center gap-1">
+            <i class="fa-solid fa-hand-pointer"></i> Tap Ingredients to Add / 点击配料添加
+          </h3>
+          <div class="grid grid-cols-4 gap-1.5">
+            <button onclick="addIngredient('tea_dust')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-amber-800 text-amber-100 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-leaf"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingTea">Tea Dust</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">茶粉</span>
+              <span id="count-tea_dust" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('coffee_powder')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-yellow-950 text-amber-100 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-seedling"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingCoffee">Coffee Powder</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">咖啡粉</span>
+              <span id="count-coffee_powder" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('milo_powder')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-emerald-800 text-white rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-cubes-stacked"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingMilo">Milo Powder</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">美禄粉</span>
+              <span id="count-milo_powder" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('horlicks_powder')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-amber-300 text-amber-900 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-wheat-awn"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingHorlicks">Horlicks</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">好立克</span>
+              <span id="count-horlicks_powder" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('condensed_milk')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-amber-100 text-amber-800 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-cow"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingCondensed">Condensed</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">炼乳</span>
+              <span id="count-condensed_milk" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('evaporated_milk')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-yellow-100 text-amber-800 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-bottle-droplet"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingEvap">Evap Milk</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">淡奶</span>
+              <span id="count-evaporated_milk" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('sugar')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-stone-100 text-stone-700 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-spoon"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingSugar">Sugar</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">白糖</span>
+              <span id="count-sugar" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('water')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-sky-200 text-sky-800 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-faucet-drip"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingWater">Hot Water</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">热水</span>
+              <span id="count-water" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('ice')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-blue-100 text-blue-800 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-snowflake"></i></div>
+              <span class="text-[10px] font-black leading-tight" id="ingIce">Ice</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">冰块</span>
+              <span id="count-ice" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('butter')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-yellow-400 text-yellow-900 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-cheese"></i></div>
+              <span class="text-[10px] font-black leading-tight">Butter</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">牛油</span>
+              <span id="count-butter" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('lime')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-lime-500 text-lime-950 rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-lemon"></i></div>
+              <span class="text-[10px] font-black leading-tight">Lime</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">酸柑</span>
+              <span id="count-lime" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="addIngredient('rose_syrup')" class="relative flex flex-col items-center p-1 rounded-lg border bg-gradient-to-b from-amber-50 to-orange-100/40 dark:from-slate-800 dark:to-slate-700 border-amber-600/10 active:scale-95 transition-transform shadow-sm">
+              <div class="w-7 h-7 flex items-center justify-center bg-rose-500 text-white rounded-full text-xs font-black mb-0.5"><i class="fa-solid fa-wine-bottle"></i></div>
+              <span class="text-[10px] font-black leading-tight">Rose Syrup</span>
+              <span class="text-[9px] font-kaiti-style text-amber-800 dark:text-amber-300 leading-tight">玫瑰浆</span>
+              <span id="count-rose_syrup" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-bold px-1 rounded-full hidden">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="shrink-0 pt-0.5">
+          <button onclick="submitDrink()" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-extrabold text-md py-2.5 rounded-xl shadow-sm active:scale-98 transition-all flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="btnDone">DONE! BREW IT / 冲好了! 送上</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="endScreen" class="hidden flex-1 flex flex-col justify-between py-2 text-center overflow-hidden">
+        <div class="space-y-4 my-auto">
+          <div>
+            <div class="inline-block bg-amber-100 dark:bg-amber-950/40 p-3 rounded-full mb-2">
+              <span class="text-4xl" id="trophyEmoji">🏆</span>
+            </div>
+            <h2 id="roundCompletedTitle" class="text-2xl font-extrabold text-amber-800 dark:text-amber-400">Round Complete!</h2>
+            <p id="roundCompletedSubtitle" class="text-xs text-slate-500 dark:text-slate-400">How well did you handle the morning Kopitiam rush?</p>
+          </div>
+
+          <div class="bg-amber-50 dark:bg-slate-700/60 max-w-xs mx-auto p-4 rounded-2xl border border-amber-500/20 shadow-sm">
+            <div id="finalScoreLabel" class="text-[10px] uppercase font-extrabold text-slate-400 dark:text-slate-300 tracking-widest mb-0.5">Final Score</div>
+            <div class="text-4xl font-black text-amber-700 dark:text-amber-400 mb-1" id="finalScoreText">5 / 5</div>
+            <p id="feedbackMessage" class="text-xs font-semibold text-amber-900 dark:text-amber-200 font-kaiti-style px-1">
+              Excellent skills, you are the Kopitiam Master!
+            </p>
+          </div>
+
+          <div class="text-[11px] text-slate-400 dark:text-slate-500 px-6 space-y-0.5">
+            <p id="statTimerUsed">Active speed selection used: 60s</p>
+            <p id="creatorCredit">Test your reflexes again. Compete with your friends or family!</p>
+          </div>
+        </div>
+
+        <div class="px-4 mt-2">
+          <button onclick="restartGame()" class="w-full max-w-md mx-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-md py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span id="btnPlayAgain">Brew Another Round / 再玩一局</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-slate-100 dark:bg-slate-950 p-1.5 text-center text-[9px] text-slate-500 dark:text-slate-400 font-bold border-t border-slate-200 dark:border-slate-800 select-none flex items-center justify-between px-3 shrink-0 h-[26px]">
+      <span>© 2026 A Leong games.</span>
+      <span class="text-amber-600 dark:text-amber-500">Majulah Brewmaster! 🇸🇬</span>
+    </footer>
   </div>
 
-  <section id="screenStart" class="screen active flex-col flex-1 items-center justify-between overflow-y-auto bg-gradient-to-b from-amber-400 via-amber-300 to-orange-200 dark:from-amber-800 dark:via-amber-900 dark:to-slate-900 px-5 py-6">
-    <div class="flex flex-col items-center gap-1 animate-slideUp">
-      <div class="text-6xl animate-floatUp"> ☕ </div>
-      <h1 class="text-4xl font-black text-amber-900 dark:text-amber-100 tracking-tight drop-shadow">Kopitiam Hero</h1>
-      <p class="text-sm font-bold text-amber-700 dark:text-amber-300 tracking-widest uppercase">Master the Kopi Order</p>
-    </div>
-
-    <div class="w-full bg-white/70 dark:bg-slate-800/70 backdrop-blur rounded-3xl shadow-xl p-4 flex flex-col gap-3 my-3">
-      <p class="text-center text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">How to Play</p>
-      <div class="grid grid-cols-3 gap-2 text-center text-xs">
-        <div class="flex flex-col items-center gap-1 bg-amber-50 dark:bg-slate-700 rounded-2xl p-2">
-          <span class="text-2xl"> 📋 </span>
-          <span class="font-bold text-slate-700 dark:text-slate-200">Read Order</span>
-        </div>
-        <div class="flex flex-col items-center gap-1 bg-amber-50 dark:bg-slate-700 rounded-2xl p-2">
-          <span class="text-2xl"> 🧪 </span>
-          <span class="font-bold text-slate-700 dark:text-slate-200">Build Mix</span>
-        </div>
-        <div class="flex flex-col items-center gap-1 bg-amber-50 dark:bg-slate-700 rounded-2xl p-2">
-          <span class="text-2xl"> ✅ </span>
-          <span class="font-bold text-slate-700 dark:text-slate-200">Serve fast!</span>
-        </div>
-      </div>
-
-      <div class="bg-amber-100 dark:bg-slate-700 rounded-2xl p-3">
-        <p class="text-xs font-black text-amber-800 dark:text-amber-300 mb-1.5 uppercase tracking-wide">Quick Glossary</p>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-700 dark:text-slate-300">
-          <span><b>O</b> = No milk</span>
-          <span><b>C</b> = Evap milk</span>
-          <span><b>Kosong</b> = No sugar</span>
-          <span><b>Gah Dai</b> = Extra sweet</span>
-          <span><b>Peng</b> = Iced</span>
-          <span><b>Siu Dai</b> = Less sweet</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-full flex flex-col gap-3 bg-white/40 dark:bg-slate-800/40 p-3 rounded-2xl mb-4">
-      <div>
-        <p class="text-center text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-amber-300 mb-1.5">Game Difficulty</p>
-        <div class="grid grid-cols-3 gap-2" id="difficultyBtns">
-          <button data-diff="easy" class="diff-btn rounded-xl py-2 font-black text-xs bg-green-500 text-white shadow transition-all">Easy</button>
-          <button data-diff="medium" class="diff-btn rounded-xl py-2 font-black text-xs bg-amber-500 text-white shadow transition-all ring-4 ring-amber-300">Medium</button>
-          <button data-diff="hard" class="diff-btn rounded-xl py-2 font-black text-xs bg-red-500 text-white shadow transition-all">Hard</button>
-        </div>
-      </div>
-
-      <div>
-        <p class="text-center text-xs font-bold uppercase tracking-widest text-amber-800 dark:text-amber-300 mb-1.5">Custom Session Clock</p>
-        <div class="grid grid-cols-3 gap-2">
-          <button id="clockDefault" data-clock="default" class="clock-btn rounded-xl py-2 font-black text-xs bg-amber-600 text-white ring-2 ring-white shadow">Progression</button>
-          <button id="clock30" data-clock="30" class="clock-btn rounded-xl py-2 font-black text-xs bg-stone-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 shadow">30s Timer</button>
-          <button id="clock90" data-clock="90" class="clock-btn rounded-xl py-2 font-black text-xs bg-stone-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 shadow">90s Timer</button>
-        </div>
-      </div>
-    </div>
-
-    <button id="btnStart" class="w-full py-4 rounded-3xl bg-amber-600 hover:bg-amber-500 active:scale-95 text-white font-black text-xl shadow-xl transition-transform tracking-wide">
-      ☕ Start Brewing!
-    </button>
-    <button id="btnDark" class="text-xs text-amber-700 dark:text-amber-400 underline opacity-70 mt-3">Toggle Dark Mode</button>
-  </section>
-
-  <section id="screenGame" class="screen flex-col flex-1 overflow-hidden relative">
-    <div class="flex-shrink-0 mx-3 mt-3 bg-amber-50 dark:bg-slate-700 rounded-2xl shadow-md p-3 border-2 border-amber-200 dark:border-slate-600">
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-xs font-black uppercase tracking-widest text-amber-600 dark:text-amber-400"> 📋 Order Ticket</span>
-        <span id="orderBadge" class="text-xs font-bold bg-amber-500 text-white rounded-full px-2 py-0.5">#1</span>
-      </div>
-      <div id="orderDisplay" class="text-center font-kaiti text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-wide min-h-[2rem]"></div>
-      <div id="orderHint" class="text-center text-xs text-slate-500 dark:text-slate-400 mt-0.5 min-h-[1rem]"></div>
-    </div>
-
-    <div class="flex-shrink-0 flex justify-center items-end mt-2 mb-1" style="height:110px">
-      <div class="relative flex flex-col items-center" style="width:72px">
-        <svg viewBox="0 0 72 110" width="72" height="110" class="absolute bottom-0 left-0 z-10">
-          <path d="M8 10 L4 100 Q4 106 10 106 L62 106 Q68 106 68 100 L64 10 Z" fill="white" stroke="#d97706" stroke-width="2.5"/>
-          <rect x="5" y="7" width="62" height="7" rx="3.5" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
-          <path d="M64 35 Q82 35 82 55 Q82 75 64 75" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
-          <g id="iceCubes" class="hidden">
-            <rect x="18" y="72" width="12" height="12" rx="2" fill="#bfdbfe" opacity="0.85"/>
-            <rect x="34" y="68" width="14" height="14" rx="2" fill="#dbeafe" opacity="0.8"/>
-            <rect x="50" y="73" width="10" height="10" rx="2" fill="#bfdbfe" opacity="0.85"/>
-          </g>
-        </svg>
-        <svg viewBox="0 0 72 110" width="72" height="110" class="absolute bottom-0 left-0 z-0" style="overflow:hidden">
-          <defs><clipPath id="cupClip"><path d="M10 17 L6 100 Q6 104 10 104 L62 104 Q66 104 66 100 L62 17 Z"/></clipPath></defs>
-          <g clip-path="url(#cupClip)">
-            <rect id="liqLayerBot" x="0" y="110" width="72" height="0" fill="#92400e" class="liquid-anim"/>
-            <rect id="liqLayerMid" x="0" y="110" width="72" height="0" fill="#d97706" class="liquid-anim"/>
-            <rect id="liqLayerTop" x="0" y="110" width="72" height="0" fill="#fef3c7" class="liquid-anim"/>
-            <rect id="liqFoam"     x="0" y="110" width="72" height="0" fill="white"   opacity="0.7" class="liquid-anim"/>
-          </g>
-        </svg>
-        <div id="strawEl" class="hidden absolute z-20 rounded-full bg-red-400" style="width:5px;height:60px;bottom:48px;right:10px;transform:rotate(8deg)"></div>
-      </div>
-    </div>
-
-    <div id="cupIngredients" class="flex-shrink-0 flex flex-wrap justify-center gap-1 px-3 min-h-[34px]"></div>
-
-    <div class="flex-1 overflow-y-auto px-3 pb-3 mt-1">
-      <p class="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-2">Ingredients</p>
-      <div id="ingredientBtns" class="grid grid-cols-3 gap-2"></div>
-    </div>
-
-    <div id="feedbackMsg" class="absolute left-1/2 bottom-20 -translate-x-1/2 pointer-events-none bg-stone-950/90 text-white rounded-2xl px-4 py-2 text-center text-xs font-black shadow-xl opacity-0 transition-opacity z-50 whitespace-nowrap"></div>
-
-    <div class="flex-shrink-0 grid grid-cols-2 gap-2 px-3 pb-3 pt-1 bg-white dark:bg-slate-800 z-10">
-      <button id="btnClear" class="rounded-2xl py-3 bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 font-black text-slate-700 dark:text-slate-200 text-sm active:scale-95 transition-transform shadow">
-        🗑 Clear
-      </button>
-      <button id="btnServe" class="rounded-2xl py-3 bg-amber-500 hover:bg-amber-400 font-black text-white text-sm active:scale-95 transition-transform shadow-lg">
-        ✅ Serve!
-      </button>
-    </div>
-  </section>
-
-  <section id="screenPause" class="screen flex-col flex-1 items-center justify-center gap-6 bg-black/60 backdrop-blur-sm px-6">
-    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-8 w-full flex flex-col items-center gap-5 animate-popIn">
-      <div class="text-5xl"> ⏸️ </div>
-      <h2 class="text-2xl font-black text-amber-700 dark:text-amber-300">Paused</h2>
-      <button id="btnResume" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-white font-black text-lg active:scale-95 transition-transform shadow">▶️ Resume</button>
-      <button id="btnQuit" class="w-full py-3 rounded-2xl bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-black text-lg active:scale-95 transition-transform shadow">🏠 Quit to Menu</button>
-    </div>
-  </section>
-
-  <section id="screenOver" class="screen flex-col flex-1 items-center justify-center gap-4 bg-gradient-to-b from-red-100 to-amber-100 dark:from-slate-900 dark:to-slate-800 px-5 overflow-y-auto py-6">
-    <div class="flex flex-col items-center gap-1 animate-popIn">
-      <div class="text-6xl"> 😵 </div>
-      <h2 class="text-3xl font-black text-red-600 dark:text-red-400">Game Over!</h2>
-    </div>
-    <div class="w-full bg-white dark:bg-slate-700 rounded-3xl shadow-xl p-5 flex flex-col gap-3 animate-slideUp">
-      <div class="grid grid-cols-2 gap-3 text-center">
-        <div class="bg-amber-50 dark:bg-slate-600 rounded-2xl p-3">
-          <p class="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">Final Score</p>
-          <p id="finalScore" class="text-3xl font-black text-amber-700 dark:text-amber-200">0</p>
-        </div>
-        <div class="bg-amber-50 dark:bg-slate-600 rounded-2xl p-3">
-          <p class="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">Best Score</p>
-          <p id="bestScore" class="text-3xl font-black text-amber-700 dark:text-amber-200">0</p>
-        </div>
-        <div class="bg-amber-50 dark:bg-slate-600 rounded-2xl p-3">
-          <p class="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">Level Reached</p>
-          <p id="finalLevel" class="text-3xl font-black text-amber-700 dark:text-amber-200">1</p>
-        </div>
-        <div class="bg-amber-50 dark:bg-slate-600 rounded-2xl p-3">
-          <p class="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">Orders Done</p>
-          <p id="finalOrders" class="text-3xl font-black text-amber-700 dark:text-amber-200">0</p>
-        </div>
-      </div>
-      <div id="overMessage" class="text-center text-sm font-bold text-slate-600 dark:text-slate-300 bg-amber-50 dark:bg-slate-600 rounded-2xl p-3"></div>
-    </div>
-    <div class="w-full flex flex-col gap-2 animate-slideUp">
-      <button id="btnRestart" class="w-full py-4 rounded-3xl bg-amber-600 hover:bg-amber-500 text-white font-black text-xl active:scale-95 transition-transform shadow-xl">🔄 Play Again</button>
-      <button id="btnMenu" class="w-full py-3 rounded-3xl bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-black text-lg active:scale-95 transition-transform shadow">🏠 Main Menu</button>
-    </div>
-  </section>
-</div>
-
-<script>
-// DATA SCHEMATICS
-const INGREDIENTS = {
-  kopi:     { label:'Kopi',       emoji:'☕', color:'bg-amber-700 text-white' },
-  teh:      { label:'Teh',        emoji:'🍵', color:'bg-orange-400 text-white' },
-  cond:     { label:'Cond. Milk', emoji:'🥛', color:'bg-yellow-100 border border-yellow-300 text-amber-900' },
-  evap:     { label:'Evap. Milk', emoji:'🍼', color:'bg-blue-100 border border-blue-300 text-slate-900' },
-  sugar:    { label:'Sugar',      emoji:'🍬', color:'bg-pink-300 text-pink-950' },
-  xsugar:   { label:'Xtra Sugar', emoji:'🍭', color:'bg-pink-500 text-white' },
-  nosugar:  { label:'No Sugar',   emoji:'🚫', color:'bg-gray-300 text-stone-800' },
-  lsugar:   { label:'Less Sugar', emoji:'💧', color:'bg-pink-200 text-pink-900' },
-  ice:      { label:'Ice',        emoji:'🧊', color:'bg-blue-300 text-blue-950' },
-  water:    { label:'Water',      emoji:'💧', color:'bg-cyan-200 text-cyan-950' },
-  xshot:    { label:'Xtra Shot',  emoji:'⚡', color:'bg-amber-900 text-white' },
-  dinosaur: { label:'Dinosaur',   emoji:'🦕', color:'bg-green-300 text-green-950' },
-  milo:     { label:'Milo',       emoji:'🟫', color:'bg-yellow-800 text-white' },
-  horlicks: { label:'Horlicks',   emoji:'🟡', color:'bg-yellow-400 text-yellow-950' },
-  bandung:  { label:'Bandung',    emoji:'🌸', color:'bg-pink-400 text-white' },
-  lime:     { label:'Lime',       emoji:'🍋', color:'bg-lime-300 text-lime-950' }
-};
-
-const RECIPES = [
-  { name:'Kopi',          hint:'Coffee + condensed milk + sugar',              required:['kopi','cond','sugar'],         forbidden:['ice','nosugar','lsugar','xsugar','evap','water','xshot'] },
-  { name:'Kopi O',        hint:'Black coffee + sugar, no milk',                required:['kopi','sugar'],                forbidden:['cond','evap','ice','nosugar','lsugar','xsugar','water','xshot'] },
-  { name:'Kopi O Kosong', hint:'Black coffee, no milk, no sugar',              required:['kopi','nosugar'],              forbidden:['cond','evap','ice','sugar','lsugar','xsugar','water','xshot'] },
-  { name:'Kopi C',        hint:'Coffee + evaporated milk + sugar',             required:['kopi','evap','sugar'],         forbidden:['cond','ice','nosugar','lsugar','xsugar','water','xshot'] },
-  { name:'Kopi C Kosong', hint:'Coffee + evaporated milk, no sugar',           required:['kopi','evap','nosugar'],       forbidden:['cond','ice','sugar','lsugar','xsugar','water','xshot'] },
-  { name:'Kopi Peng',     hint:'Iced coffee + condensed milk',                 required:['kopi','cond','ice'],           forbidden:['evap','nosugar','water','xshot'] },
-  { name:'Kopi O Peng',   hint:'Iced black coffee + sugar',                    required:['kopi','sugar','ice'],          forbidden:['cond','evap','nosugar','lsugar','xsugar','water','xshot'] },
-  { name:'Kopi C Peng',   hint:'Iced coffee + evaporated milk',                required:['kopi','evap','ice'],           forbidden:['cond','nosugar','water','xshot'] },
-  { name:'Kopi Gah Dai',  hint:'Coffee + condensed milk + extra sugar',        required:['kopi','cond','xsugar'],        forbidden:['ice','nosugar','lsugar','sugar','evap','water','xshot'] },
-  { name:'Kopi Siu Dai',  hint:'Coffee + condensed milk + less sugar',         required:['kopi','cond','lsugar'],        forbidden:['ice','nosugar','sugar','xsugar','evap','water','xshot'] },
-  { name:'Teh',             hint:'Tea + condensed milk + sugar',                 required:['teh','cond','sugar'],         forbidden:['ice','nosugar','lsugar','xsugar','evap','water','xshot'] },
-  { name:'Teh O',           hint:'Black tea + sugar, no milk',                   required:['teh','sugar'],                forbidden:['cond','evap','ice','nosugar','lsugar','xsugar','water','xshot'] },
-  { name:'Teh O Kosong',    hint:'Black tea, no milk, no sugar',                 required:['teh','nosugar'],              forbidden:['cond','evap','ice','sugar','lsugar','xsugar','water','xshot'] },
-  { name:'Teh C',           hint:'Tea + evaporated milk + sugar',                required:['teh','evap','sugar'],         forbidden:['cond','ice','nosugar','lsugar','xsugar','water','xshot'] },
-  { name:'Teh Peng',        hint:'Iced tea + condensed milk',                   required:['teh','cond','ice'],           forbidden:['evap','nosugar','water','xshot'] },
-  { name:'Milo',            hint:'Milo + condensed milk',                        required:['milo','cond'],                 forbidden:['ice','evap','dinosaur'] },
-  { name:'Milo Peng',       hint:'Iced Milo + condensed milk',                  required:['milo','cond','ice'],           forbidden:['evap','dinosaur'] },
-  { name:'Milo Dinosaur',   hint:'Iced Milo + Milo powder on top',              required:['milo','ice','dinosaur'],       forbidden:['evap'] },
-  { name:'Horlicks Peng',   hint:'Iced Horlicks + condensed milk',               required:['horlicks','cond','ice'],       forbidden:['evap'] },
-  { name:'Bandung Peng',    hint:'Iced rose syrup + evaporated milk',            required:['bandung','evap','ice'],        forbidden:['cond'] }
-];
-
-const LEVEL_CONFIG = [
-  { recipePool:[0,1,15], timeMs:18000, ordersToNext:2 },
-  { recipePool:[0,1,2,3,4,10,11,15,16,17], timeMs:15000, ordersToNext:3 },
-  { recipePool:'all', timeMs:12000, ordersToNext:4 }
-];
-
-const DIFF_CONFIG = {
-  easy:   { timeMulti:1.5, scoreMulti:0.7, livesStart:5, hintVisible:true },
-  medium: { timeMulti:1.0, scoreMulti:1.0, livesStart:3, hintVisible:true },
-  hard:   { timeMulti:0.7, scoreMulti:1.4, livesStart:2, hintVisible:false }
-};
-
-const STATE = {
-  screen: 'start',
-  difficulty: 'medium',
-  customTimeOverride: null, // Track 30s vs 90s custom dashboards
-  score: 0,
-  bestScore: 0,
-  level: 1,
-  lives: 3,
-  ordersThisLevel: 0,
-  totalOrders: 0,
-  currentRecipe: null,
-  cupIngredients: [],
-  paused: false,
-  timerStart: 0,
-  timerLimit: 0,
-  timerCurrentLeft: 0
-};
-
-// RUNTIME ENGINE
-let timerLoopId = null;
-let feedbackAnimationTimer = null;
-
-function $(id){ return document.getElementById(id); }
-
-function showScreen(name){
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $('screenStart').classList.toggle('active', name==='start');
-  $('screenGame' ).classList.toggle('active', name==='game');
-  $('screenPause').classList.toggle('active', name==='pause');
-  $('screenOver' ).classList.toggle('active', name==='over');
-  
-  const inGame = (name==='game' || name==='pause');
-  $('gameHeader' ).classList.toggle('hidden', !inGame);
-  $('timerBarWrap').classList.toggle('hidden', !inGame);
-  STATE.screen = name;
-}
-
-function startTimer(durationMs) {
-  stopTimer();
-  STATE.timerLimit = durationMs;
-  STATE.timerStart = Date.now();
-  
-  timerLoopId = setInterval(() => {
-    if (STATE.paused) return;
+  <script>
+    // State Variables
+    let currentLanguage = 'en';
+    let currentTheme = 'light';
+    let selectedTimerSeconds = 60;
     
-    const elapsed = Date.now() - STATE.timerStart;
-    const remaining = Math.max(0, STATE.timerLimit - elapsed);
-    STATE.timerCurrentLeft = remaining;
-    
-    const percentage = (remaining / STATE.timerLimit) * 100;
-    $('timerBar').style.width = `${percentage}%`;
-    $('timerText').textContent = `${(remaining / 1000).toFixed(1)}s remaining`;
-    
-    if (remaining <= 4000 && remaining > 0 && Math.floor(remaining / 500) % 2 === 0) {
-      sfxUrgent();
+    // Game Flow State
+    let currentRoundIndex = 0;
+    let currentScore = 0;
+    let roundDrinks = [];
+    let userIngredients = {};
+    let timerInterval = null;
+    let timeLeft = 0;
+    let timerTotal = 60;
+
+    const dictionary = {
+      en: {
+        tagline: "Learn to brew Singaporean coffee shop drinks like a professional 'Kopi Master'! Perfect for grandchildren, grandparents, and coffee lovers alike!",
+        btnStartGame: "START BREWING / 开始冲泡",
+        timerSelectTitle: "⏱️ Select Round Speed (Timer)",
+        speedFast: "Fast!",
+        speedMedium: "Normal",
+        speedChill: "Chill",
+        recipeTitle: "Target Recipe Checklist",
+        guideText: "LIVE COUNT",
+        timerLabel: "Orders",
+        scoreLabel: "Score",
+        emptyCupText: "EMPTY CUP / 空杯",
+        btnClearCup: "Reset Cup",
+        panelGridTitle: "🧺 Tap Ingredients to Add",
+        btnDone: "DONE! BREW IT",
+        roundCompletedTitle: "Round Complete!",
+        roundCompletedSubtitle: "How well did you handle the morning Kopitiam rush?",
+        finalScoreLabel: "Final Score",
+        btnPlayAgain: "Brew Another Round",
+        toastHeader: "Kopitiam Uncle Says:",
+        ingTea: "Tea Dust",
+        ingCoffee: "Coffee Powder",
+        ingMilo: "Milo Powder",
+        ingHorlicks: "Horlicks",
+        ingCondensed: "Condensed",
+        ingEvap: "Evap Milk",
+        ingSugar: "Sugar",
+        ingWater: "Hot Water",
+        ingIce: "Ice"
+      },
+      zh: {
+        tagline: "学习像专业的“咖啡大师”一样冲泡新加坡传统饮料！适合男女老少、祖孙同乐，一起传承本地特色咖啡店文化！",
+        btnStartGame: "开始冲泡 (START BREWING)",
+        timerSelectTitle: "⏱️ 选择每题限时 (倒计时)",
+        speedFast: "快速",
+        speedMedium: "普通",
+        speedChill: "休闲",
+        recipeTitle: "当前饮品配料单",
+        guideText: "实时比对",
+        timerLabel: "饮品单",
+        scoreLabel: "当前得分",
+        emptyCupText: "空杯子",
+        btnClearCup: "清除配料",
+        panelGridTitle: "🧺 点击配料进行冲泡",
+        btnDone: "冲好了! 送上",
+        roundCompletedTitle: "冲泡挑战结束！",
+        roundCompletedSubtitle: "你在早晨繁忙的咖啡店里能应付得来吗？",
+        finalScoreLabel: "最终得分",
+        btnPlayAgain: "再玩一局",
+        toastHeader: "咖啡店安哥训话：",
+        ingTea: "茶粉",
+        ingCoffee: "咖啡粉",
+        ingMilo: "美禄粉",
+        ingHorlicks: "好立克粉",
+        ingCondensed: "炼乳",
+        ingEvap: "淡乳",
+        ingSugar: "白糖",
+        ingWater: "热水",
+        ingIce: "冰块"
+      }
+    };
+
+    const ingredientList = [
+      'tea_dust', 'coffee_powder', 'milo_powder', 'horlicks_powder', 
+      'condensed_milk', 'evaporated_milk', 'sugar', 'water', 'ice',
+      'butter', 'lime', 'rose_syrup'
+    ];
+
+    const ingredientEmojis = {
+      tea_dust: "🍃", coffee_powder: "🫘", milo_powder: "🍫", horlicks_powder: "🌾",
+      condensed_milk: "🥛", evaporated_milk: "🍼", sugar: "🍬", water: "💧", ice: "🧊",
+      butter: "🧈", lime: "🍋", rose_syrup: "🥤"
+    };
+
+    const ingredientNamesZH = {
+      tea_dust: "茶粉", coffee_powder: "咖啡粉", milo_powder: "美禄粉", horlicks_powder: "好立克",
+      condensed_milk: "炼乳", evaporated_milk: "淡奶", sugar: "白糖", water: "热水", ice: "冰块",
+      butter: "牛油", lime: "酸柑", rose_syrup: "玫瑰浆"
+    };
+
+    const sarcasticComments = [
+      "Abua siah! Sugar and powder also cannot count?! Go wash toilet lah!",
+      "You study so high standard, make one cup of Kopi also like fail chemistry!",
+      "My grandmother brew with blindfold also better than you!",
+      "Chin chai anyhow mix! You think this is Long Island Tea is it?",
+      "Alamak! This one is called water wash floor, not Kopi! No standard!",
+      "Hoseh liao, customer drink already sure high blood pressure!",
+      "Aneh! Did you drop the sugar bag inside the cup? So sweet!"
+    ];
+
+    const masterDrinksPool = [
+      {
+        id: "kopi_gu_you",
+        category: "Kopi Special",
+        nameEN: "Kopi Gu You",
+        nameZH: "牛油咖啡",
+        explainEN: "Traditional black coffee with condensed milk, hot water, topped with a rich slice of butter.",
+        explainZH: "传统高加浓缩黑咖啡加上炼乳、热水，最后放入一片香浓的牛油。",
+        recipe: { coffee_powder: 2, condensed_milk: 1, water: 2, butter: 1 }
+      },
+      {
+        id: "teh_limau",
+        category: "Teh Alternative",
+        nameEN: "Teh Limau",
+        nameZH: "酸柑柠檬茶",
+        explainEN: "Refreshing localized tea without milk, infused with 1 freshly squeezed calamansi lime and sugar.",
+        explainZH: "没有加奶的清爽本地红茶，融入了1粒新鲜酸柑和白糖。",
+        recipe: { tea_dust: 2, sugar: 1, water: 2, lime: 1 }
+      },
+      {
+        id: "bandung",
+        category: "Kopitiam Classic",
+        nameEN: "Sirap Bandung",
+        nameZH: "玫瑰三色",
+        explainEN: "Evaporated Milk combined beautifully with rich vibrant sweet Rose Syrup over chilled Ice cubes.",
+        explainZH: "香浓的淡奶与甜美的玫瑰糖浆完美结合，加入清凉的冰块。",
+        recipe: { rose_syrup: 2, evaporated_milk: 2, ice: 2 }
+      },
+      {
+        id: "kopi",
+        category: "Kopi Standard",
+        nameEN: "Kopi",
+        nameZH: "咖啡",
+        explainEN: "Standard Singapore coffee brew with condensed milk and evaporated milk.",
+        explainZH: "新加坡标志性传统咖啡，默认加入炼乳与少许淡奶。",
+        recipe: { coffee_powder: 2, condensed_milk: 1, evaporated_milk: 1, water: 2 }
+      },
+      {
+        id: "teh_o_peng",
+        category: "Teh Standard",
+        nameEN: "Teh O Peng",
+        nameZH: "冰红茶加糖",
+        explainEN: "Black tea with sugar, served over crisp solid ice.",
+        explainZH: "不加奶的红茶，加糖，加冰块。",
+        recipe: { tea_dust: 2, sugar: 1, water: 2, ice: 2 }
+      },
+      {
+        id: "milo_dinosaur",
+        category: "Milo Specialty",
+        nameEN: "Milo Dinosaur",
+        nameZH: "美禄恐龙",
+        explainEN: "Iced sweet Milo topped with a mountain heap of extra dry Milo powder on top.",
+        explainZH: "冰美禄上面再堆满一大勺厚厚的未溶解美禄粉。",
+        recipe: { milo_powder: 4, condensed_milk: 1, water: 2, ice: 2 }
+      },
+      {
+        id: "kopi_c_kosong",
+        category: "Kopi Regular",
+        nameEN: "Kopi C Kosong",
+        nameZH: "淡奶咖啡无糖",
+        explainEN: "Hot coffee brewed with evaporated milk and hot water, completely unsweetened.",
+        explainZH: "热咖啡加淡奶和热开水，完全不加任何炼乳或白糖。",
+        recipe: { coffee_powder: 2, evaporated_milk: 2, water: 2 }
+      },
+      {
+        id: "teh_c_siew_dai",
+        category: "Teh Premium",
+        nameEN: "Teh C Siew Dai",
+        nameZH: "淡奶茶少糖",
+        explainEN: "Aromatic premium tea dust with evaporated milk and reduced amount of sugar.",
+        explainZH: "芳香的传统红茶配淡奶，并且减少白糖分量（少甜）。",
+        recipe: { tea_dust: 2, evaporated_milk: 2, sugar: 1, water: 2 }
+      }
+    ];
+
+    function toggleLanguage() {
+      currentLanguage = (currentLanguage === 'en') ? 'zh' : 'en';
+      document.getElementById('langLabel').textContent = currentLanguage === 'en' ? '简体中文' : 'English';
+      applyTranslations();
+      updateRecipeChecklist();
     }
-    
-    if (remaining <= 0) {
-      stopTimer();
-      handleTimeout();
+
+    function applyTranslations() {
+      const strings = dictionary[currentLanguage];
+      document.getElementById('tagline').textContent = strings.tagline;
+      document.getElementById('btnStartGame').innerHTML = `<i class="fa-solid fa-circle-play"></i> ${strings.btnStartGame}`;
+      document.getElementById('timerSelectTitle').textContent = strings.timerSelectTitle;
+      document.getElementById('speedFast').textContent = strings.speedFast;
+      document.getElementById('speedMedium').textContent = strings.speedMedium;
+      document.getElementById('speedChill').textContent = strings.speedChill;
+      document.getElementById('guideText').textContent = strings.guideText;
+      document.getElementById('emptyCupText').textContent = currentLanguage === 'en' ? 'EMPTY CUP / 空杯' : '空杯子';
+      document.getElementById('btnClearCup').innerHTML = `<i class="fa-solid fa-trash-can-arrow-up"></i> ${strings.btnClearCup}`;
+      document.getElementById('panelGridTitle').innerHTML = `<i class="fa-solid fa-hand-pointer"></i> ${strings.panelGridTitle}`;
+      document.getElementById('btnDone').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${strings.btnDone}`;
+      document.getElementById('roundCompletedTitle').textContent = strings.roundCompletedTitle;
+      document.getElementById('roundCompletedSubtitle').textContent = strings.roundCompletedSubtitle;
+      document.getElementById('finalScoreLabel').textContent = strings.finalScoreLabel;
+      document.getElementById('btnPlayAgain').innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> ${strings.btnPlayAgain}`;
+      document.getElementById('toastHeader').innerHTML = `<i class="fa-solid fa-comment-dots"></i> ${strings.toastHeader}`;
+
+      document.getElementById('ingTea').textContent = strings.ingTea;
+      document.getElementById('ingCoffee').textContent = strings.ingCoffee;
+      document.getElementById('ingMilo').textContent = strings.ingMilo;
+      document.getElementById('ingHorlicks').textContent = strings.ingHorlicks;
+      document.getElementById('ingCondensed').textContent = strings.ingCondensed;
+      document.getElementById('ingEvap').textContent = strings.ingEvap;
+      document.getElementById('ingSugar').textContent = strings.ingSugar;
+      document.getElementById('ingWater').textContent = strings.ingWater;
+      document.getElementById('ingIce').textContent = strings.ingIce;
+      
+      const currentDrink = roundDrinks[currentRoundIndex];
+      if (currentDrink) {
+        document.getElementById('drinkNameEN').textContent = currentDrink.nameEN;
+        document.getElementById('drinkNameZH').textContent = currentDrink.nameZH;
+        document.getElementById('drinkExplain').textContent = currentLanguage === 'en' ? currentDrink.explainEN : currentDrink.explainZH;
+      }
     }
-  }, 100);
-}
 
-function stopTimer(){
-  if(timerLoopId) { clearInterval(timerLoopId); timerLoopId = null; }
-}
+    function toggleDarkMode() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeIcon').className = "fa-solid fa-moon text-yellow-300 text-xs";
+        currentTheme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').className = "fa-solid fa-sun text-yellow-300 text-xs";
+        currentTheme = 'dark';
+      }
+    }
 
-function pauseTimer(){
-  stopTimer();
-  const elapsedSoFar = Date.now() - STATE.timerStart;
-  STATE.timerLimit = Math.max(0, STATE.timerLimit - elapsedSoFar);
-}
+    function setTimerOption(seconds) {
+      selectedTimerSeconds = seconds;
+      document.querySelectorAll('.timer-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-white');
+        btn.classList.add('bg-white', 'dark:bg-slate-800');
+      });
+      document.getElementById(`timerOpt-${seconds}`).classList.remove('bg-white', 'dark:bg-slate-800');
+      document.getElementById(`timerOpt-${seconds}`).classList.add('bg-amber-500', 'text-white');
+      playTapSound();
+    }
 
-function resumeTimer(){
-  STATE.timerStart = Date.now();
-  startTimer(STATE.timerLimit);
-}
+    function clearCup() {
+      ingredientList.forEach(item => userIngredients[item] = 0);
+      playRemoveSound();
+      updateUI();
+    }
 
-function flashFeedback(msg, styleClass) {
-  const el = $('feedbackMsg');
-  clearTimeout(feedbackAnimationTimer);
-  el.textContent = msg;
-  el.className = `absolute left-1/2 bottom-20 -translate-x-1/2 pointer-events-none bg-stone-900/95 text-white rounded-2xl px-4 py-2 text-center text-xs font-black shadow-xl z-50 transition-opacity opacity-100 ${styleClass}`;
-  
-  feedbackAnimationTimer = setTimeout(() => {
-    el.style.opacity = '0';
-  }, 1500);
-}
+    function addIngredient(type) {
+      userIngredients[type] = (userIngredients[type] || 0) + 1;
+      playTapSound();
+      updateUI();
+      evaluateLiveUncleCoaching();
+    }
 
-function getLevelCfg(){
-  return LEVEL_CONFIG[Math.min(STATE.level-1, LEVEL_CONFIG.length-1)];
-}
+    function generateRoundDrinks() {
+      let pool = [...masterDrinksPool];
+      let selected = [];
+      for (let i = 0; i < 5; i++) {
+        let randIdx = Math.floor(Math.random() * pool.length);
+        selected.push(pool[randIdx]);
+      }
+      return selected;
+    }
 
-function getDiffCfg(){
-  return DIFF_CONFIG[STATE.difficulty];
-}
+    function startGame() {
+      initAudio();
+      currentRoundIndex = 0;
+      currentScore = 0;
+      roundDrinks = generateRoundDrinks();
+      
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('endScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      document.getElementById('headerTimerBox').style.display = 'flex';
+      document.getElementById('headerGameStats').style.display = 'flex';
+      
+      loadRound(0);
+    }
 
-function updateHUD(){
-  $('scoreDisplay').textContent = STATE.score;
-  $('levelDisplay').textContent = STATE.level;
-  
-  const livesEl = $('livesDisplay');
-  livesEl.innerHTML = '';
-  for(let i=0; i<getDiffCfg().livesStart; i++){
-    const heart = document.createElement('span');
-    heart.textContent = i < STATE.lives ? '❤️' : '🖤';
-    livesEl.appendChild(heart);
-  }
-}
+    function loadRound(index) {
+      currentRoundIndex = index;
+      ingredientList.forEach(item => userIngredients[item] = 0);
+      
+      const currentDrink = roundDrinks[index];
+      document.getElementById('drinkCategory').textContent = `${currentDrink.category} [${index+1}/5]`;
+      document.getElementById('drinkNameEN').textContent = currentDrink.nameEN;
+      document.getElementById('drinkNameZH').textContent = currentDrink.nameZH;
+      document.getElementById('drinkExplain').textContent = currentLanguage === 'en' ? currentDrink.explainEN : currentDrink.explainZH;
+      
+      document.getElementById('gameProgress').textContent = `${index + 1} / 5`;
+      document.getElementById('gameScore').textContent = currentScore;
+      
+      document.getElementById('liveUncleMessage').textContent = currentLanguage === 'en' ? 
+        "Steady! Fast hand fast foot, pick the right items below to fill up the order!" : 
+        "稳当点！手快脚快，看着右边的指标在下方选择配料！";
 
-function updateCupVisual(){
-  const cup = STATE.cupIngredients;
-  $('iceCubes').classList.toggle('hidden', !cup.includes('ice'));
-  $('strawEl').classList.toggle('hidden', !cup.some(k => ['kopi','teh','milo','horlicks','bandung'].includes(k)));
-  
-  const layers = [];
-  if(cup.some(k => ['kopi','teh','milo','horlicks','bandung'].includes(k))) layers.push({ frac: 0.5, color: '#6b3e26' });
-  if(cup.includes('cond') || cup.includes('evap')) layers.push({ frac: 0.25, color: '#fef3c7' });
-  if(cup.includes('water')) layers.push({ frac: 0.15, color: '#cbd5e1' });
-  
-  const rects = ['liqLayerBot', 'liqLayerMid', 'liqLayerTop', 'liqFoam'];
-  rects.forEach(r => { $(r).setAttribute('height', '0'); $(r).setAttribute('y', '110'); });
-  
-  let currentY = 104;
-  layers.forEach((layer, index) => {
-    const h = Math.round(layer.frac * 80);
-    currentY -= h;
-    const targetRect = $(rects[index]);
-    targetRect.setAttribute('fill', layer.color);
-    targetRect.setAttribute('y', currentY);
-    targetRect.setAttribute('height', h);
-  });
-}
+      updateUI();
+      startTimer();
+    }
 
-function renderCupChips(){
-  const container = $('cupIngredients');
-  container.innerHTML = '';
-  STATE.cupIngredients.forEach(key => {
-    const data = INGREDIENTS[key];
-    const chip = document.createElement('span');
-    chip.className = `inline-flex items-center gap-1 text-[11px] font-black px-2 py-0.5 rounded-full shadow-sm ${data.color}`;
-    chip.textContent = `${data.emoji} ${data.label}`;
-    container.appendChild(chip);
-  });
-}
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerTotal = selectedTimerSeconds * 1000;
+      timeLeft = timerTotal;
+      
+      const timerSecs = document.getElementById('timerSecs');
+      const timerBar = document.getElementById('timerBar');
+      timerSecs.classList.remove('urgent-countdown');
+      
+      let lastTime = performance.now();
+      timerInterval = setInterval(() => {
+        let now = performance.now();
+        let dt = now - lastTime;
+        lastTime = now;
+        
+        timeLeft -= dt;
+        if (timeLeft <= 0) {
+          timeLeft = 0;
+          clearInterval(timerInterval);
+          handleTimeOut();
+        }
+        
+        let displaySecs = Math.ceil(timeLeft / 1000);
+        timerSecs.textContent = displaySecs + "s";
+        
+        let pct = (timeLeft / timerTotal) * 100;
+        timerBar.style.width = `${pct}%`;
+        
+        if (pct < 30) {
+          timerSecs.classList.add('urgent-countdown');
+          if (Math.random() < 0.08) playUrgentSound();
+        }
+      }, 100);
+    }
 
-function renderIngredientBtns(){
-  const container = $('ingredientBtns');
-  container.innerHTML = '';
-  Object.keys(INGREDIENTS).forEach(key => {
-    const data = INGREDIENTS[key];
-    const btn = document.createElement('button');
-    btn.className = `ing-btn rounded-xl p-2 flex flex-col items-center justify-center gap-1 text-center text-xs font-bold shadow active:scale-95 transition-transform ${data.color}`;
-    btn.innerHTML = `<span class="text-xl">${data.emoji}</span><span class="leading-tight text-[10px]">${data.label}</span>`;
-    btn.addEventListener('click', () => {
-      if(STATE.paused || STATE.screen !== 'game') return;
-      if(STATE.cupIngredients.includes(key)){
-        flashFeedback("Already added!", "text-amber-400");
-        return;
+    function handleTimeOut() {
+      playFailSound();
+      triggerUncleAnger(currentLanguage === 'en' ? "TOO SLOW LAAH! Customer run away already!" : "太慢了啦！顾客等不及都跑掉了！");
+      setTimeout(() => { nextRound(); }, 2200);
+    }
+
+    function evaluateLiveUncleCoaching() {
+      const currentDrink = roundDrinks[currentRoundIndex];
+      if (!currentDrink) return;
+      
+      let totalTarget = 0;
+      let totalCurrent = 0;
+      let overpoured = false;
+
+      for (let ing of ingredientList) {
+        let target = currentDrink.recipe[ing] || 0;
+        let cur = userIngredients[ing] || 0;
+        totalTarget += target;
+        totalCurrent += cur;
+        if (cur > target) overpoured = true;
+      }
+
+      const coachPara = document.getElementById('liveUncleMessage');
+      if (overpoured) {
+        coachPara.textContent = currentLanguage === 'en' ? 
+          "Alamak! You over-poured already! Tap Reset Cup to start this order again!" : 
+          "哎呀！你倒太多了啦！赶紧点击‘清除配料’重新来过！";
+      } else if (totalCurrent === totalTarget) {
+        coachPara.textContent = currentLanguage === 'en' ? 
+          "Perfect mix detected! Tap the big brown 'DONE! BREW IT' button now!" : 
+          "配比完全吻合！赶紧点击下方的大冲好了送上按钮！";
+      } else if (totalCurrent > 0) {
+        coachPara.textContent = currentLanguage === 'en' ? 
+          "Looking good... keep matching the checklist requirements above!" : 
+          "看着不错……继续添加配料以满足上方的数值！";
+      }
+    }
+
+    function triggerUncleAnger(msg) {
+      document.getElementById('liveUncleMessage').textContent = msg;
+      const uncleBox = document.getElementById('liveUncleBox');
+      uncleBox.classList.add('animate-pulse', 'border-red-500');
+      setTimeout(() => { uncleBox.classList.remove('animate-pulse', 'border-red-500'); }, 2000);
+    }
+
+    function submitDrink() {
+      clearInterval(timerInterval);
+      const currentDrink = roundDrinks[currentRoundIndex];
+      let isCorrect = true;
+      
+      for (let ing of ingredientList) {
+        let target = currentDrink.recipe[ing] || 0;
+        let user = userIngredients[ing] || 0;
+        if (target !== user) {
+          isCorrect = false;
+          break;
+        }
       }
       
-      const categoryBases = ['kopi','teh','milo','horlicks','bandung'];
-      if(categoryBases.includes(key) && STATE.cupIngredients.some(k => categoryBases.includes(k))){
-        flashFeedback("Only one drink base allowed!", "text-red-400");
-        return;
+      if (isCorrect) {
+        playSuccessSound();
+        currentScore++;
+        document.getElementById('gameScore').textContent = currentScore;
+        
+        let complimentaryMsgs = currentLanguage === 'en' ? 
+          ["Steady pom pipi!", "Very authentic flavor!", "Customer give you high tips!", "Fast hand champion!"] :
+          ["超级稳当！", "味道非常正宗！", "顾客给了你小费！", "绝顶快手！"];
+        let randomGood = complimentaryMsgs[Math.floor(Math.random() * complimentaryMsgs.length)];
+        
+        document.getElementById('liveUncleMessage').textContent = `🎉 ${randomGood}`;
+        setTimeout(() => { nextRound(); }, 1200);
+      } else {
+        playFailSound();
+        let wrongComment = sarcasticComments[Math.floor(Math.random() * sarcasticComments.length)];
+        triggerUncleAnger(wrongComment);
+        setTimeout(() => { nextRound(); }, 3200);
       }
-      
-      STATE.cupIngredients.push(key);
-      sfxTap();
-      renderCupChips();
-      updateCupVisual();
-    });
-    container.appendChild(btn);
-  });
-}
-
-function newOrder(){
-  STATE.cupIngredients = [];
-  renderCupChips();
-  updateCupVisual();
-  
-  const poolIdx = getLevelCfg().recipePool;
-  let activeRecipes = RECIPES;
-  if(poolIdx !== 'all') {
-    activeRecipes = poolIdx.map(i => RECIPES[i]);
-  }
-  
-  const selected = activeRecipes[Math.floor(Math.random() * activeRecipes.length)];
-  STATE.currentRecipe = selected;
-  
-  $('orderDisplay').textContent = selected.name;
-  $('orderBadge').textContent = `#${STATE.totalOrders + 1}`;
-  $('orderHint').textContent = getDiffCfg().hintVisible ? selected.hint : 'No hints available on Hard mode!';
-  
-  // Set execution clock length based on normal level logic or override selector
-  let baseMs = STATE.customTimeOverride ? STATE.customTimeOverride : getLevelCfg().timeMs;
-  startTimer(Math.round(baseMs * getDiffCfg().timeMulti));
-}
-
-function serveOrder(){
-  if(!STATE.currentRecipe || STATE.paused) return;
-  const recipe = STATE.currentRecipe;
-  const cup = STATE.cupIngredients;
-  
-  const missing = recipe.required.filter(r => !cup.includes(r));
-  const badInclusions = recipe.forbidden.filter(f => cup.includes(f));
-  
-  if(missing.length === 0 && badInclusions.length === 0) {
-    stopTimer();
-    sfxSuccess();
-    STATE.score += Math.round(100 * getDiffCfg().scoreMulti);
-    STATE.totalOrders++;
-    STATE.ordersThisLevel++;
-    
-    flashFeedback("Perfect Brew! served ✅", "text-green-400");
-    
-    if(STATE.ordersThisLevel >= getLevelCfg().ordersToNext && STATE.level < LEVEL_CONFIG.length && !STATE.customTimeOverride) {
-      STATE.level++;
-      STATE.ordersThisLevel = 0;
-      setTimeout(() => { flashFeedback(`Advanced to Level ${STATE.level}!`, "text-amber-300"); newOrder(); }, 1200);
-    } else {
-      setTimeout(newOrder, 1000);
     }
-  } else {
-    stopTimer();
-    sfxFail();
-    STATE.lives--;
-    updateHUD();
-    flashFeedback("Wrong recipe order mismatch! ❌", "text-red-400");
-    if(STATE.lives <= 0) setTimeout(endGame, 1200);
-    else setTimeout(newOrder, 1200);
-  }
-}
 
-function handleTimeout(){
-  sfxFail();
-  STATE.lives--;
-  updateHUD();
-  flashFeedback("Time's up! Customer walked out ⏱️", "text-red-400");
-  if(STATE.lives <= 0) setTimeout(endGame, 1200);
-  else setTimeout(newOrder, 1200);
-}
+    function nextRound() {
+      if (currentRoundIndex < 4) {
+        loadRound(currentRoundIndex + 1);
+      } else {
+        endGame();
+      }
+    }
 
-function startGame(){
-  STATE.score = 0;
-  STATE.lives = getDiffCfg().livesStart;
-  STATE.level = 1;
-  STATE.ordersThisLevel = 0;
-  STATE.totalOrders = 0;
-  STATE.paused = false;
-  updateHUD();
-  renderIngredientBtns();
-  showScreen('game');
-  sfxStart();
-  newOrder();
-}
-
-function endGame(){
-  stopTimer();
-  if(STATE.score > STATE.bestScore) STATE.bestScore = STATE.score;
-  $('finalScore').textContent = STATE.score;
-  $('bestScore').textContent = STATE.bestScore;
-  $('finalLevel').textContent = STATE.level;
-  $('finalOrders').textContent = STATE.totalOrders;
-  $('overMessage').textContent = STATE.score > 200 ? "You're a Kopitiam Legend! 🏆" : "Practice makes perfect lah! ☕";
-  showScreen('over');
-}
-
-function pauseGame(){ if(STATE.screen==='game'){ STATE.paused=true; pauseTimer(); showScreen('pause'); } }
-function resumeGame(){ STATE.paused=false; showScreen('game'); resumeTimer(); }
-
-// LIFECYCLE LISTENERS
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.diff-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      STATE.difficulty = btn.dataset.diff;
-      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('ring-4', 'ring-amber-300', 'ring-green-300', 'ring-red-300'));
-      const activeColor = STATE.difficulty === 'easy' ? 'ring-green-300' : STATE.difficulty === 'hard' ? 'ring-red-300' : 'ring-amber-300';
-      btn.classList.add('ring-4', activeColor);
-    });
-  });
-
-  // Wire custom dashboard 30s / 90s configuration buttons
-  const clockButtons = document.querySelectorAll('.clock-btn');
-  clockButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      clockButtons.forEach(b => b.classList.remove('bg-amber-600', 'text-white', 'ring-2', 'ring-white', 'bg-stone-200', 'dark:bg-slate-700'));
-      clockButtons.forEach(b => { if(b !== btn) b.classList.add('bg-stone-200', 'dark:bg-slate-700'); });
-      btn.classList.add('bg-amber-600', 'text-white', 'ring-2', 'ring-white');
+    function endGame() {
+      clearInterval(timerInterval);
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('headerTimerBox').style.display = 'none';
+      document.getElementById('headerGameStats').style.display = 'none';
+      document.getElementById('endScreen').classList.remove('hidden');
       
-      const value = btn.dataset.clock;
-      if (value === '30') STATE.customTimeOverride = 30000;
-      else if (value === '90') STATE.customTimeOverride = 90000;
-      else STATE.customTimeOverride = null;
-    });
-  });
+      const finalScoreText = document.getElementById('finalScoreText');
+      const feedbackMessage = document.getElementById('feedbackMessage');
+      const trophyEmoji = document.getElementById('trophyEmoji');
+      const statTimerUsed = document.getElementById('statTimerUsed');
+      
+      finalScoreText.textContent = `${currentScore} / 5`;
+      statTimerUsed.textContent = currentLanguage === 'en' ? 
+        `Active speed selection used: ${selectedTimerSeconds} seconds limit.` :
+        `使用的冲水限时：${selectedTimerSeconds}秒极速模式。`;
+        
+      if (currentScore === 5) {
+        trophyEmoji.textContent = "🏆🥇";
+        feedbackMessage.textContent = currentLanguage === 'en' ?
+          "Steady pom pipi! You are the legendary Kopitiam Master of Maxwell! 🇸🇬" :
+          "超级稳！你已经是麦士威熟食中心名副其实的咖啡大师了！🇸🇬";
+      } else if (currentScore >= 3) {
+        trophyEmoji.textContent = "🥈☕";
+        feedbackMessage.textContent = currentLanguage === 'en' ?
+          "Not bad! You are a promising Kopi apprentice. Just don't let Uncle catch you daydreaming!" :
+          "还不错！你是一个有前途的咖啡学徒。只要别让安哥抓到你在发白日梦就行！";
+      } else {
+        trophyEmoji.textContent = "🧹🥴";
+        feedbackMessage.textContent = currentLanguage === 'en' ?
+          "Alamak! Go wash the coffee cups. Go back, practice, and look at the recipe checklist on top!" :
+          "哎呀！赶紧去洗咖啡杯啦。回去好好看着旁边的冲配指标再来挑战！";
+      }
+    }
 
-  $('btnStart').addEventListener('click', startGame);
-  $('btnServe').addEventListener('click', serveOrder);
-  $('btnClear').addEventListener('click', () => {
-    STATE.cupIngredients = [];
-    renderCupChips();
-    updateCupVisual();
-    sfxRemove();
-    flashFeedback("Cup reset cleared!", "text-slate-400");
-  });
-  $('btnPause').addEventListener('click', pauseGame);
-  $('btnResume').addEventListener('click', resumeGame);
-  $('btnQuit').addEventListener('click', () => { stopTimer(); showScreen('start'); });
-  $('btnRestart').addEventListener('click', startGame);
-  $('btnMenu').addEventListener('click', () => showScreen('start'));
-  $('btnDark').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-});
-</script>
+    function restartGame() {
+      playTapSound();
+      document.getElementById('endScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('hidden');
+    }
+
+    function updateRecipeChecklist() {
+      const currentDrink = roundDrinks[currentRoundIndex];
+      if (!currentDrink) return;
+      
+      const checklistContainer = document.getElementById('dynamicRecipeChecklist');
+      checklistContainer.innerHTML = '';
+      
+      Object.keys(currentDrink.recipe).forEach(ing => {
+        let targetCount = currentDrink.recipe[ing];
+        let currentCount = userIngredients[ing] || 0;
+        let remaining = targetCount - currentCount;
+        
+        let statusText = "";
+        let statusClass = "text-amber-800 dark:text-amber-300";
+        
+        if (remaining > 0) {
+          statusText = currentLanguage === 'en' ? `(${remaining} left)` : `(差${remaining})`;
+        } else if (remaining === 0) {
+          statusText = "✓ OK";
+          statusClass = "text-emerald-600 dark:text-emerald-400 font-black";
+        } else {
+          statusText = currentLanguage === 'en' ? `(+${Math.abs(remaining)})` : `(多${Math.abs(remaining)})`;
+          statusClass = "text-rose-600 dark:text-rose-400 font-black animate-pulse";
+        }
+        
+        let nameStr = currentLanguage === 'en' ? ing.replace('_', ' ') : (ingredientNamesZH[ing] || ing);
+        
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between bg-white/60 dark:bg-slate-900/40 px-1.5 py-0.5 rounded border border-amber-500/10 text-[10px]";
+        row.innerHTML = `
+          <span class="capitalize truncate max-w-[65px]"><span class="inline-block mr-0.5">${ingredientEmojis[ing] || '▪'}</span>${nameStr}</span>
+          <span class="${statusClass} text-right shrink-0">${currentCount}/${targetCount} ${statusText}</span>
+        `;
+        checklistContainer.appendChild(row);
+      });
+    }
+
+    function updateUI() {
+      ingredientList.forEach(item => {
+        const countBadge = document.getElementById(`count-${item}`);
+        if (countBadge) {
+          let currentAmt = userIngredients[item] || 0;
+          if (currentAmt > 0) {
+            countBadge.textContent = currentAmt;
+            countBadge.classList.remove('hidden');
+          } else {
+            countBadge.classList.add('hidden');
+          }
+        }
+      });
+      
+      let totalUnits = 0;
+      ingredientList.forEach(item => { totalUnits += (userIngredients[item] || 0); });
+      
+      const waterLvl = document.getElementById('liquidWater');
+      const powderLvl = document.getElementById('liquidPowder');
+      const milkLvl = document.getElementById('liquidMilk');
+      const sugarLvl = document.getElementById('liquidSugar');
+      const limeLvl = document.getElementById('liquidLime');
+      const roseLvl = document.getElementById('liquidRose');
+      const emptyCupText = document.getElementById('emptyCupText');
+      const iceFloating = document.getElementById('iceFloating');
+      const butterFloating = document.getElementById('butterFloating');
+
+      if (totalUnits === 0) {
+        waterLvl.setAttribute('height', '0');
+        powderLvl.setAttribute('height', '0');
+        milkLvl.setAttribute('height', '0');
+        sugarLvl.setAttribute('height', '0');
+        limeLvl.setAttribute('height', '0');
+        roseLvl.setAttribute('height', '0');
+        emptyCupText.classList.remove('hidden');
+        iceFloating.classList.add('hidden');
+        butterFloating.classList.add('hidden');
+      } else {
+        emptyCupText.classList.add('hidden');
+        let maxPourHeight = 72;
+        let unitPx = Math.min(maxPourHeight / totalUnits, 15); 
+        
+        let uWater = userIngredients['water'] || 0;
+        let uPowder = (userIngredients['coffee_powder'] || 0) + (userIngredients['tea_dust'] || 0) + (userIngredients['milo_powder'] || 0) + (userIngredients['horlicks_powder'] || 0);
+        let uMilk = (userIngredients['condensed_milk'] || 0) + (userIngredients['evaporated_milk'] || 0);
+        let uSugar = userIngredients['sugar'] || 0;
+        let uLime = userIngredients['lime'] || 0;
+        let uRose = userIngredients['rose_syrup'] || 0;
+
+        let hRose = uRose * unitPx;
+        let hLime = uLime * unitPx;
+        let hSugar = uSugar * unitPx;
+        let hMilk = uMilk * unitPx;
+        let hPowder = uPowder * unitPx;
+        let hWater = uWater * unitPx;
+
+        roseLvl.setAttribute('height', hRose);
+        roseLvl.setAttribute('y', 92 - hRose);
+
+        limeLvl.setAttribute('height', hLime);
+        limeLvl.setAttribute('y', 92 - hRose - hLime);
+
+        sugarLvl.setAttribute('height', hSugar);
+        sugarLvl.setAttribute('y', 92 - hRose - hLime - hSugar);
+
+        milkLvl.setAttribute('height', hMilk);
+        milkLvl.setAttribute('y', 92 - hRose - hLime - hSugar - hMilk);
+
+        powderLvl.setAttribute('height', hPowder);
+        powderLvl.setAttribute('y', 92 - hRose - hLime - hSugar - hMilk - hPowder);
+
+        waterLvl.setAttribute('height', hWater);
+        waterLvl.setAttribute('y', 92 - hRose - hLime - hSugar - hMilk - hPowder - hWater);
+
+        if ((userIngredients['ice'] || 0) > 0) iceFloating.classList.remove('hidden');
+        else iceFloating.classList.add('hidden');
+
+        if ((userIngredients['butter'] || 0) > 0) butterFloating.classList.remove('hidden');
+        else butterFloating.classList.add('hidden');
+      }
+
+      const stackList = document.getElementById('recipeStackList');
+      const noIngredientsPrompt = document.getElementById('noIngredientsPrompt');
+      
+      const itemsToRemove = stackList.querySelectorAll('.user-mix-item');
+      itemsToRemove.forEach(el => el.remove());
+
+      let hasItems = false;
+      ingredientList.forEach(item => {
+        let count = userIngredients[item] || 0;
+        if (count > 0) {
+          hasItems = true;
+          let nameStr = currentLanguage === 'en' ? item.replace('_', ' ') : (ingredientNamesZH[item] || item);
+          const tag = document.createElement('div');
+          tag.className = "user-mix-item bg-amber-600 text-white px-1.5 py-0.5 rounded text-[10px] flex items-center gap-0.5 capitalize border border-amber-500/10";
+          tag.innerHTML = `<span>${ingredientEmojis[item] || ''} ${nameStr} x${count}</span>`;
+          stackList.appendChild(tag);
+        }
+      });
+
+      if (hasItems) noIngredientsPrompt.classList.add('hidden');
+      else noIngredientsPrompt.classList.remove('hidden');
+
+      updateRecipeChecklist();
+    }
+
+    applyTranslations();
+  </script>
 </body>
 </html>
